@@ -28,6 +28,7 @@
 				$user->set("email", $email);//required
 				$user->set("password", $passwd1);//required
 				$user->set("bio", "No bio"); // bio initially empty but can be changed in profile page
+				$user->set("profPic", "imgs/defaultProf.jpg");	// set default profile picture
 				try {
 					$user->signUp();
 					//if we made it to here, we are successful

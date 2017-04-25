@@ -17,7 +17,7 @@
 	require_once "Upload.php";
 
 
-	// Check if image file is a actual image or fake image
+	// Check if image file is an actual image or fake image
 	if(isset($_POST["submit"])) {
 		$upload = new Upload();
 		$file = 'photo';
@@ -61,6 +61,16 @@
 			$name = basename($_FILES[$file]['name']);
 			if(move_uploaded_file($_FILES[$file]['tmp_name'], $upload->destination.$name))
 			{
+				// check if user has profile pic saved
+				if(ParseUser::getCurrentUser()->get('profPic') != 'imgs/imgs/defaultProf.jpg')
+				{
+					// delete old picture
+					unlink(ParseUser::getCurrentUser()->get('profPic'));
+				}
+				// save new path to profile pic
+				ParseUser::getCurrentUser()->set('profPic', $upload->destination.$name);
+				ParseUser::getCurrentUser()->save();
+
 				echo '<div class="alert alert-success">';
 				echo  '<strong>Success!</strong> The file '.$_FILES[$file]['name'].' has been uploaded!';
 				echo '</div>';				
@@ -114,7 +124,7 @@ $("#bioSubmit").click(function(){
 
 		  	<!-- start of the body for the panel -->
 		  	<div class="panel-body">      
-		    	<img src="imgs/Artist1.png" class="img-circle" alt="Cinque Terre" width="250" height="250"> 
+		    	<img <?php echo 'src='.ParseUser::getCurrentUser()->get("profPic"); ?> class="img-circle" alt="Cinque Terre" width="250" height="250"> 
 
 					<form action="profile.php" method="post" enctype="multipart/form-data">
 					    <div class="col-md-offset-5">

@@ -66,7 +66,7 @@
     Vote! <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
-    <li><a href="#">Vote</a></li>
+    <li><a href="http://apollo.jadengrossman.com/Bracket.php">Vote</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#">Check Results</a></li>
   </ul>
