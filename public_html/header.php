@@ -37,6 +37,8 @@ function createAlert($msg) {
 function createAlertWithType($type, $msg) {
 	echo "<div class='alert alert-". $type ."' role='alert' style='text-align:center'>$msg</div>";
 }
+
+$user = ParseUser::getCurrentUser();
 ?>
 
 <html>
