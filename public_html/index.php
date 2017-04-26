@@ -4,12 +4,9 @@
 	use Parse\ParseQuery;
 	use Parse\ParseException;
 
-	/*
-	* Since this is the homepage, they don't need to be logged in
-	if(!ParseUser::getCurrentUser()) {
-		header('location:login.php');
-	}
-	*/
+  //this is wrong and shouldnt be here but we have too since the redirect is set to here
+  include "soundcloud.php";
+
 ?>
 <body>
 <h1>Recent Winners</h1>

@@ -20,19 +20,12 @@
 
 	$sc = NULL;
 
-	if($user->get("soundcloud_user_id")) {
-		$sc = new SoundCloud($user->get("soundcloud_user_id"));
+	if($user->get("soundcloud_token")) {
+		$sc = new SoundCloud($user->get("soundcloud_token"));
 	}
 
 	if(isset($_POST['accountName'])) {
-		//fetch id from name
-		$id = SoundCloud::getUserIdFromUsername($_POST['accountName']);
-		if(!$id) {
-			createAlert("Error: Coundn't find account, check your spelling and try again");
-		} else {
-			$user->set("soundcloud_user_id", $id);
-			$user->save();
-		}
+		SoundCloud::launchOauth2();
 	}
 
 	//check for unlink
@@ -40,17 +33,6 @@
 		if($sc) {
 			$sc->unlink();
 		}
-	}
-
-	if($sc) {
-		$sc->getPlaylists();
-		foreach($sc->getPlaylists() as $playlist => $value) {
-			$a = print_r($playlist,true);
-			echo $a."\n\n\n\n\n$value";
-		}
-		/*foreach ($sc->getTracks() as $track) {
-			echo $track->user_id;
-		}*/
 	}
 
 	// Check if image file is an actual image or fake image
@@ -120,6 +102,11 @@
 			echo  '<strong>Error!</strong> File could not be uploaded.';
 			echo '</div>';
 		}
+	}
+
+	if($sc) {
+		$tracks = $sc->getTracks();
+		echo "H";
 	}
 ?>
 
@@ -252,13 +239,9 @@ $("#bioSubmit").click(function(){
 		  	<div class="panel-body">
 		  	
 		  	<?php
-		  		if(!$user->get("soundcloud_user_id")) {
+		  		if(!$user->get("soundcloud_token")) {
 		  			echo '<form class="form-inline" action="profile.php" method="POST">
-							  <div class="form-group">
-							    <label for="accountName">SoundCloud Name</label>
-							    <input type="text" class="form-control" id="accountName" name="accountName" placeholder="OneWordInUrl">
-							  </div>
-							  <button type="submit" class="btn btn-success">Link</button>
+							  <button type="submit" class="btn btn-success btn-lg" name="accountName" value="someval">Link</button>
 							</form>';
 		  		} else {
 		  			echo '<form class="form-inline" action="profile.php" method="POST">

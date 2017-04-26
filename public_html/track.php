@@ -14,6 +14,7 @@ class Track {
 		if($obj) {
 			$this->id = $obj->id;
 			$this->user_id = $$obj->user_id;
+			echo $this->id;
 		}
 	}
 }
