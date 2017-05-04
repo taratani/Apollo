@@ -137,7 +137,7 @@ $("#bioSubmit").click(function(){
 
 <!-- this is the beginning of the panel -->
 <div class="row">
-	<div class="col-md-6 col-md-offset-1">
+	<div class="col-md-10 col-md-offset-1">
 		<div class="panel panel-info" style="text-align:center;">
 
 		<!-- heading for the panel -->
@@ -171,7 +171,7 @@ $("#bioSubmit").click(function(){
 			        	</div>
 			        	<div class="btn-group" role="group">
 			            	<button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-			                <div class="hidden-xs">Social Media</div>
+			                <div class="hidden-xs">Soundcloud</div>
 			            	</button>
 			        	</div>
 			    	</div>
@@ -211,15 +211,17 @@ $("#bioSubmit").click(function(){
 			          			<h3>No tournaments yet. Check them out <a href="index.php">here!</a></h3>
 			        		</div>
 			        		<div class="tab-pane fade in" id="tab3">
-			        			<a class="btn btn-social btn-facebook" href="#">
-		    						<span class="fa fa-facebook"></span> Facebook
-		 						</a>
-				          		<a class="btn btn-social btn-twitter" href="#">
-		    						<span class="fa fa-twitter"></span> Twitter
-		 						</a>
-		 						<a class="btn btn-social btn-soundcloud">
-		    						<span class="fa fa-soundcloud" href="#"></span> Soundcloud
-		 						</a>
+							  	<?php
+							  		if(!$user->get("soundcloud_token")) {
+							  			echo '<form class="form-inline" action="profile.php" method="POST">
+												  <button type="submit" class="btn btn-success btn-lg" name="accountName" value="someval">Link</button>
+												</form>';
+							  		} else {
+							  			echo '<form class="form-inline" action="profile.php" method="POST">
+												  <button type="submit" class="btn btn-danger" name="unlink" value="yes">Unlink</button>
+												</form>';
+							  		}
+							  	?>
 			        		</div>
 		      			</div>
 		    		</div>
@@ -227,31 +229,6 @@ $("#bioSubmit").click(function(){
 			</div> <!-- end of div for body of panel -->
 		</div>
 	</div>
-	<div class="col-md-3 col-md-offset-1">
-		<div class="panel panel-info" style="text-align:center;">
-
-		<!-- heading for the panel -->
-		 	<div class="panel-heading">
-		    	<h3 class="panel-title">SoundCloud!</h3>
-		  	</div>
-
-		  	<!-- start of the body for the panel -->
-		  	<div class="panel-body">
-		  	
-		  	<?php
-		  		if(!$user->get("soundcloud_token")) {
-		  			echo '<form class="form-inline" action="profile.php" method="POST">
-							  <button type="submit" class="btn btn-success btn-lg" name="accountName" value="someval">Link</button>
-							</form>';
-		  		} else {
-		  			echo '<form class="form-inline" action="profile.php" method="POST">
-							  <button type="submit" class="btn btn-danger" name="unlink" value="yes">Unlink</button>
-							</form>';
-		  		}
-		  	?>
-		  	</div>
-		</div>    
-	</div> 
 </div>	<!-- end of container for panel -->
 
 <?php

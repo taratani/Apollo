@@ -63,7 +63,7 @@ $user = ParseUser::getCurrentUser();
 
     <!-- This will be the left side of the navbar -->
       <ul class="nav navbar-nav">
-        <li><a href="#">Tournaments</a></li>
+        <li><a href="WorkingBracket.php">Tournaments</a></li>
       </ul>
      
 

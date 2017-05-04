@@ -330,6 +330,58 @@ class ParseQueryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testContainsSingle()
+    {
+        $testObject = ParseObject::create('TestObject');
+        $testObject->set('foo', 'foobarfoo');
+        $testObject->save();
+        $query = new ParseQuery('TestObject');
+        $query->contains('foo', 'bar');
+        $results = $query->find();
+        $this->assertEquals(
+            count($results),
+            1,
+            'Contains should find the string.'
+        );
+    }
+
+    public function testContainsMultiple()
+    {
+        $this->provideTestObjects(10);
+        $query = new ParseQuery('TestObject');
+        $query->contains('foo', 'bar');
+        $results = $query->find();
+        $this->assertEquals(
+            count($results),
+            10,
+            'Contains function did not return correct number of objects.'
+        );
+
+        $query = new ParseQuery('TestObject');
+        $query->contains('foo', '8');
+        $results = $query->find();
+        $this->assertEquals(
+            count($results),
+            1,
+            'Contains function did not return correct number of objects.'
+        );
+    }
+
+    public function testContainsNonExistent()
+    {
+        $testObject = ParseObject::create('TestObject');
+        $testObject->set('foo', 'foobarfoo');
+        $testObject->save();
+        $query = new ParseQuery('TestObject');
+        $query->contains('foo', 'baz');
+        $results = $query->find();
+        $this->assertEquals(
+            count($results),
+            0,
+            'Contains should not find.'
+        );
+    }
+    
     public function testGreaterThan()
     {
         $this->provideTestObjects(10);
@@ -2096,6 +2148,37 @@ class ParseQueryTest extends \PHPUnit_Framework_TestCase
             new ParseQuery('Class1'),
             new ParseQuery('Class2')
         ]);
+
+    }
+
+    /**
+     * @group query-set-conditions
+     */
+    public function testSetConditions()
+    {
+        $query = new ParseQuery('TestObject');
+        $query->_setConditions([
+            [
+                'key'  => 'value'
+            ]
+        ]);
+
+        $this->assertEquals([
+            'where' => [
+                [
+                    'key'   => 'value'
+                ]
+            ]
+        ], $query->_getOptions());
+    }
+
+    public function testBadConditions()
+    {
+        $this->setExpectedException(ParseException::class,
+            "Conditions must be in an array");
+
+        $query = new ParseQuery('TestObject');
+        $query->_setConditions('not-an-array');
 
     }
 }
