@@ -21,18 +21,18 @@
 	}
 ?>
 <body>
-	<div class="col-md-4 col-md-offset-4" style="padding-top:10%"> 
+	<div class="col-md-4 col-md-offset-4" style=""> 
 		<div class="well" style="text-align:center">
 			<h2>Apollo</h2>
 			<hr>
 			<form action="login.php" method="POST">
 				 <div class="form-group">
 				    <label for="user">Username</label>
-				    <input type="text" class="form-control" id="user" name="user" placeholder="Username">
+				    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
 				  </div>
 				  <div class="form-group">
 				    <label for="password">Password</label>
-				    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+				    <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Password">
 				  </div>
 
 				  <button type="submit" class="btn btn-success">Login</button>

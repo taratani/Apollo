@@ -37,6 +37,8 @@ function createAlert($msg) {
 function createAlertWithType($type, $msg) {
 	echo "<div class='alert alert-". $type ."' role='alert' style='text-align:center'>$msg</div>";
 }
+
+$user = ParseUser::getCurrentUser();
 ?>
 
 <html>
@@ -45,19 +47,23 @@ function createAlertWithType($type, $msg) {
 
 		<!--include bootstrap css in every file, done by storing it in the header -->
 	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-social.css" rel="stylesheet">
+	<link href="css/font-awesome.css" rel="stylesheet">
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </head>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.php">
         <img alt="Apollo" src="imgs/ApolloLogo.png" width="25px" height="25px">
       </a>
     </div>
 
     <!-- This will be the left side of the navbar -->
       <ul class="nav navbar-nav">
-        <li><a href="#">Link</a></li>
+        <li><a href="WorkingBracket.php">Tournaments</a></li>
       </ul>
      
 
@@ -70,7 +76,7 @@ function createAlertWithType($type, $msg) {
 	          ParseUser::getCurrentUser()->get("username") .
 	          '<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-	            <li><a href="#">Profile</a></li>
+	            <li><a href="profile.php">Profile</a></li>
 	            <li role="separator" class="divider"></li>
 	            <li><a href="signout.php">Logout</a></li>
 	          </ul>
@@ -84,7 +90,7 @@ function createAlertWithType($type, $msg) {
 		          <input type="password" class="form-control" placeholder="Password" id="passwd" name="passwd">
 		        </div>
 		        <button type="submit" class="btn btn-success">Login</button>
-		        <a href="signup.php"><button class="btn btn-danger btn-sm" type="button">Sign Up</button></a>
+		        <a href="signup.php"><button class="btn btn-danger" type="button">Sign Up</button></a>
 		      </form></li>
 		      <li></li>';
 

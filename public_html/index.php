@@ -65,7 +65,7 @@
   <ul class="dropdown-menu">
     <li><a href="http://apollo.jadengrossman.com/WorkingBracket.php">Vote</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">Check Results</a></li>
+    <li><a href="http://apollo.jadengrossman.com/Results.php">Check Results</a></li>
   </ul>
 </div></p>
   </div>
@@ -90,7 +90,7 @@
   <ul class="dropdown-menu">
     <li><a href="http://apollo.jadengrossman.com/WorkingBracket2.php">Vote</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">Check results</a></li>
+    <li><a href="http://apollo.jadengrossman.com/Results.php">Check results</a></li>
   </ul>
 </div></p>
 

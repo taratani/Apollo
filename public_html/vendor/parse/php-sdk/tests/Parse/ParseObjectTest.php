@@ -2,10 +2,14 @@
 
 namespace Parse\Test;
 
+use Parse\HttpClients\ParseCurlHttpClient;
+use Parse\HttpClients\ParseStreamHttpClient;
 use Parse\Internal\SetOperation;
 use Parse\ParseACL;
+use Parse\ParseClient;
 use Parse\ParseInstallation;
 use Parse\ParseObject;
+use Parse\ParsePushStatus;
 use Parse\ParseQuery;
 use Parse\ParseRole;
 use Parse\ParseSession;
@@ -16,6 +20,11 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         Helper::setUp();
+    }
+
+    public function setUp()
+    {
+        Helper::setHttpClient();
     }
 
     public function tearDown()
@@ -88,8 +97,10 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $t2->get('test'), 'Fetch failed.');
     }
 
-    public function testDelete()
+    public function testDeleteStream()
     {
+        ParseClient::setHttpClient(new ParseStreamHttpClient());
+
         $obj = ParseObject::create('TestObject');
         $obj->set('foo', 'bar');
         $obj->save();
@@ -97,6 +108,21 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         $query = new ParseQuery('TestObject');
         $this->setExpectedException('Parse\ParseException', 'Object not found');
         $out = $query->get($obj->getObjectId());
+
+    }
+
+    public function testDeleteCurl()
+    {
+        ParseClient::setHttpClient(new ParseCurlHttpClient());
+
+        $obj = ParseObject::create('TestObject');
+        $obj->set('foo', 'bar');
+        $obj->save();
+        $obj->destroy();
+        $query = new ParseQuery('TestObject');
+        $this->setExpectedException('Parse\ParseException', 'Object not found');
+        $out = $query->get($obj->getObjectId());
+
     }
 
     public function testFind()
@@ -894,8 +920,10 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($childSimultaneous->isDirty());
     }
 
-    public function testSaveAll()
+    public function testSaveAllStream()
     {
+        ParseClient::setHttpClient(new ParseStreamHttpClient());
+
         Helper::clearClass('TestObject');
         $objs = [];
         for ($i = 1; $i <= 90; $i++) {
@@ -907,8 +935,30 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         $query = new ParseQuery('TestObject');
         $result = $query->find();
         $this->assertEquals(90, count($result));
+
     }
 
+    public function testSaveAllCurl()
+    {
+        ParseClient::setHttpClient(new ParseCurlHttpClient());
+
+        Helper::clearClass('TestObject');
+        $objs = [];
+        for ($i = 1; $i <= 90; $i++) {
+            $obj = ParseObject::create('TestObject');
+            $obj->set('test', 'test');
+            $objs[] = $obj;
+        }
+        ParseObject::saveAll($objs);
+        $query = new ParseQuery('TestObject');
+        $result = $query->find();
+        $this->assertEquals(90, count($result));
+
+    }
+
+    /**
+     * @group test-empty-objects-arrays
+     */
     public function testEmptyObjectsAndArrays()
     {
         $obj = ParseObject::create('TestObject');
@@ -997,6 +1047,7 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         ParseRole::_unregisterSubclass();
         ParseInstallation::_unregisterSubclass();
         ParseSession::_unregisterSubclass();
+        ParsePushStatus::_unregisterSubclass();
 
         new ParseObject('TestClass');
 
@@ -1098,6 +1149,9 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @group dirty-children
+     */
     public function testDirtyChildren()
     {
         $obj = new ParseObject('TestClass');
@@ -1110,10 +1164,51 @@ class ParseObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($obj->isDirty());
 
         $obj->set('innerObject', $obj2);
+        $this->assertTrue($obj->isDirty());
+
+        $this->assertTrue($obj2->isDirty());
+
+        $obj->save();
+        $this->assertFalse($obj->isDirty());
+        $this->assertFalse($obj2->isDirty());
+
+
+        // update the child again
+        $obj2->set('key2', 'an unsaved value');
+        $this->assertTrue($obj->isDirty());
+        $obj->save();
+
+
+        // test setting a child in child
+        $obj3 = new ParseObject('TestClass');
+        $obj3->set('key2', 'child of child');
+        $obj2->set('innerObject', $obj3);
 
         $this->assertTrue($obj->isDirty());
 
+        $obj2->save();
+        $this->assertFalse($obj->isDirty());
+
+        $obj3->set('key2', 'an unsaved value 2');
+        $this->assertTrue($obj->isDirty());
+
+
+        // test setting a child in child in child!
+        $obj4 = new ParseObject('TestClass');
+        $obj4->set('key2', 'child of child of child!');
+        $obj3->set('innerObject', $obj4);
+
+        $this->assertTrue($obj->isDirty());
+
+        $obj3->save();
+        $this->assertFalse($obj->isDirty());
+
+        $obj4->set('key2', 'an unsaved value 3');
+        $this->assertTrue($obj->isDirty());
+
         $obj->destroy();
+        $obj2->destroy();
+        $obj3->destroy();
 
     }
 

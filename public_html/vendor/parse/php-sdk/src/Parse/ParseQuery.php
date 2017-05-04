@@ -135,6 +135,30 @@ class ParseQuery
     }
 
     /**
+     * Sets the conditions of this parse query from an array
+     *
+     * @param array $conditions Array of Conditions to set
+     * @throws ParseException
+     */
+    public function _setConditions($conditions)
+    {
+        if(!is_array($conditions)) {
+            throw new ParseException("Conditions must be in an array");
+
+        }
+
+        // iterate over and add each condition
+        foreach($conditions as $key => $entry) {
+            foreach($entry as $condition => $value) {
+                $this->addCondition($key, $condition, $value);
+
+            }
+
+        }
+
+    }
+
+    /**
      * Add a constraint to the query that requires a particular key's value to
      * be not equal to the provided value.
      *
@@ -243,7 +267,7 @@ class ParseQuery
 
         return $this;
     }
-    
+
     /**
      * Add a constraint to the query that requires a particular key's value to
      * end with the provided value.
@@ -259,7 +283,23 @@ class ParseQuery
 
         return $this;
     }
-    
+
+    /**
+     * Adds a constraint for finding string values that contain a provided
+     * string. This may be slow for large datasets.
+     *
+     * @param string $key   The key to check.
+     * @param mixed  $value The substring that the value must contain.
+     *
+     * @return ParseQuery Returns this query, so you can chain this call.
+     */
+    public function contains($key, $value)
+    {
+        $this->addCondition($key, '$regex', $this->quote($value));
+
+        return $this;
+    }
+
     /**
      * Returns an associative array of the query constraints.
      *
@@ -325,7 +365,7 @@ class ParseQuery
             $queryOptions['where'] = json_encode($queryOptions['where']);
         }
 
-        return http_build_query($queryOptions);
+        return http_build_query($queryOptions, null, '&');
     }
 
     /**
