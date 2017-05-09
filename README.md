@@ -14,4 +14,4 @@ public_html --- contains all of the primary source code.
 remaining folders --- contain various website elements such as CSS templates, images, Parse source files, and SoundCloud API source files.
 
 ## How To Build/Run/Test Code
-...
+The platform can be accessed simply by visiting http://apollo.jadengrossman.com/homepage.php. To perform the unit tests, simply run the UploadTest.php and BiographyTest.php files located in the public_html folder.
