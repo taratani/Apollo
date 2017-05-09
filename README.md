@@ -7,14 +7,11 @@ media publicity. This provides an engaging medium for both musicians and listene
 quality music.
 
 ## Repository Structure
-root:
-contains the project milestone submissions as well as the project presentations.
+root --- contains the project milestone submissions as well as the project presentations.
 
-public_html:
-contains all of the primary source code.
+public_html --- contains all of the primary source code.
 
-remaining folders:
-contain various website elements such as CSS templates, images, Parse source files, and SoundCloud API source files.
+remaining folders --- contain various website elements such as CSS templates, images, Parse source files, and SoundCloud API source files.
 
 ## How To Build/Run/Test Code
 ...
